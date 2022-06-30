@@ -246,7 +246,7 @@ final class Highlighter
         return 'color: #333;';
     }
 
-    private function validateMaps()
+    private function validateMaps(): void
     {
         $missingKeys = [];
 
@@ -259,7 +259,7 @@ final class Highlighter
         if (count($missingKeys) > 0) {
             throw new RuntimeException(
                 'Your style map is missing the following keys: '
-                . implode(', ',$missingKeys)
+                . implode(', ', $missingKeys)
             );
         }
     }

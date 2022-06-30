@@ -59,3 +59,7 @@ will result in the following HTML:
 which will look a little something like this, when rendered in a browser:
 
 ![](highlight.png)
+
+You can customize it by passing your own style map and/or token map, see [the Highlighter class](src/Highlighter.php) for an example of both.
+
+I know this method doesn't support dark modes, but I could easily change the style tag to a class and then it would. This just fits my current needs. I might switch to the class based approach later.
