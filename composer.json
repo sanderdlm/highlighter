@@ -1,0 +1,22 @@
+{
+    "name": "dreadnip/highlighter",
+    "description": "PHP syntax highlighter using tokens",
+    "require": {
+        "php": "^8.1"
+    },
+    "require-dev": {
+        "phpstan/phpstan": "1.8",
+        "squizlabs/php_codesniffer": "^3.6",
+        "phpunit/phpunit": "^9.5"
+    },
+    "autoload": {
+        "psr-4": {
+            "Highlighter\\": "src/"
+        }
+    },
+    "autoload-dev":{
+        "psr-4" : {
+            "Highlighter\\Test\\": "tests/"
+        }
+    }
+}
