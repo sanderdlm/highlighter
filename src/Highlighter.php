@@ -243,7 +243,7 @@ final class Highlighter
             }
         }
 
-        return '#333';
+        return 'color: #333;';
     }
 
     private function validateMaps()
