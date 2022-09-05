@@ -3,22 +3,21 @@
 namespace Highlighter\Test;
 
 use Highlighter\Highlighter;
+use Highlighter\Token;
 use PHPUnit\Framework\TestCase;
 
 class HighlighterTest extends TestCase
 {
-    public function testParse(): void
+    public function testHtmlEntitiesInTokenText(): void
     {
-        $foo = '<?= "Hello world" ?>';
+        $input = '<?= "Hello world" ?>';
 
-        $highlighter = new Highlighter();
+        $tokens = Token::tokenize($input);
 
-        $parsedTree = $highlighter->parse($foo);
-
-        $this->assertCount(5, $parsedTree);
-        $this->assertEquals(390, $parsedTree[0]->id);
-        $this->assertEquals(391, $parsedTree[4]->id);
-        $this->assertEquals('&quot;Hello world&quot;', $parsedTree[2]->text);
+        $this->assertCount(5, $tokens);
+        $this->assertEquals(390, $tokens[0]->id);
+        $this->assertEquals(391, $tokens[4]->id);
+        $this->assertEquals('&quot;Hello world&quot;', $tokens[2]->getTextAsSafeHtml());
     }
 
     public function testRender(): void
@@ -41,5 +40,18 @@ class HighlighterTest extends TestCase
         $this->assertStringStartsWith('<pre><code>', $highlightedHtml);
         $this->assertStringEndsWith('</code></pre>', $highlightedHtml);
         $this->assertStringContainsString('color: pink;', $highlightedHtml);
+    }
+
+    public function testVegetableExample(): void
+    {
+        $foo = file_get_contents('tests/vegetable.php');
+
+        $highlighter = new Highlighter();
+
+        $html = $highlighter->render($foo);
+
+        file_put_contents('tests/vegetable.html', $html);
+
+        $this->assertFileExists('tests/vegetable.html');
     }
 }
