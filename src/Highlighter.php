@@ -1,8 +1,9 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Highlighter;
 
-use PhpToken;
 use RuntimeException;
 
 final class Highlighter
@@ -13,7 +14,7 @@ final class Highlighter
             T_CALLABLE, // any callable,
             T_NAME_FULLY_QUALIFIED,
             T_NAME_QUALIFIED,
-            T_NAME_RELATIVE,3
+            T_NAME_RELATIVE,
         ],
         'keyword' => [
             T_IF,
@@ -202,28 +203,21 @@ final class Highlighter
 
     public function render(string $input): bool|string
     {
-        $tokens = self::parse($input);
+        $tokens = Token::tokenize($input);
 
         ob_start();
 
         echo '<pre><code>';
         foreach ($tokens as $token) {
-            echo '<span style="' . self::getStyle($token->id) . '">' . $token->text . '</span>';
+            echo sprintf(
+                '<span style="%s">%s</span>',
+                self::getStyle($token->id),
+                $token->getTextAsSafeHtml()
+            );
         }
         echo '</code></pre>';
 
         return ob_get_clean();
-    }
-
-    /**
-     * @return PhpToken[]
-     */
-    public function parse(string $input): array
-    {
-        return array_map(function (PhpToken $token) {
-            $token->text = htmlspecialchars($token->text);
-            return $token;
-        }, PhpToken::tokenize($input));
     }
 
     private function getStyle(int $tokenType): string
