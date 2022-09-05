@@ -16,9 +16,9 @@ class HighlighterTest extends TestCase
         $parsedTree = $highlighter->parse($foo);
 
         $this->assertCount(5, $parsedTree);
-        $this->assertEquals(390, $parsedTree[0]->type);
-        $this->assertEquals(391, $parsedTree[4]->type);
-        $this->assertEquals('&quot;Hello world&quot;', $parsedTree[2]->value);
+        $this->assertEquals(390, $parsedTree[0]->id);
+        $this->assertEquals(391, $parsedTree[4]->id);
+        $this->assertEquals('&quot;Hello world&quot;', $parsedTree[2]->text);
     }
 
     public function testRender(): void

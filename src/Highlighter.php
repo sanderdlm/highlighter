@@ -2,6 +2,7 @@
 
 namespace Highlighter;
 
+use PhpToken;
 use RuntimeException;
 
 final class Highlighter
@@ -116,7 +117,6 @@ final class Highlighter
             T_NUM_STRING,
             T_DOLLAR_OPEN_CURLY_BRACES,
             T_CURLY_OPEN,
-            999999 // special characters: ; { } [ ] ,
         ],
         'operator' => [
             T_BOOLEAN_AND,
@@ -156,7 +156,7 @@ final class Highlighter
             T_POW,
             T_POW_EQUAL,
             T_AMPERSAND_FOLLOWED_BY_VAR_OR_VARARG,
-            T_AMPERSAND_NOT_FOLLOWED_BY_VAR_OR_VARARG
+            T_AMPERSAND_NOT_FOLLOWED_BY_VAR_OR_VARARG,
         ],
         'magic' => [
             T_DIR,
@@ -202,13 +202,13 @@ final class Highlighter
 
     public function render(string $input): bool|string
     {
-        $tree = self::parse($input);
+        $tokens = self::parse($input);
 
         ob_start();
 
         echo '<pre><code>';
-        foreach ($tree as $token) {
-            echo '<span style="' . self::getStyle($token->type) . '">' . $token->value . '</span>';
+        foreach ($tokens as $token) {
+            echo '<span style="' . self::getStyle($token->id) . '">' . $token->text . '</span>';
         }
         echo '</code></pre>';
 
@@ -216,23 +216,14 @@ final class Highlighter
     }
 
     /**
-     * @return Token[]
+     * @return PhpToken[]
      */
     public function parse(string $input): array
     {
-        $tree = [];
-
-        $tokens = token_get_all($input);
-
-        foreach ($tokens as $token) {
-            if (is_array($token)) {
-                $tree[] = new Token($token[0], htmlspecialchars($token[1]));
-            } else {
-                $tree[] = new Token(99999, htmlspecialchars($token));
-            }
-        }
-
-        return $tree;
+        return array_map(function (PhpToken $token) {
+            $token->text = htmlspecialchars($token->text);
+            return $token;
+        }, PhpToken::tokenize($input));
     }
 
     private function getStyle(int $tokenType): string
