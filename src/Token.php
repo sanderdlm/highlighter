@@ -8,7 +8,7 @@ use PhpToken;
 
 class Token extends PhpToken
 {
-    public function getTextAsSafeHtml()
+    public function getTextAsSafeHtml(): string
     {
         /*
          * The usage of htmlspecialchars here is necessary to

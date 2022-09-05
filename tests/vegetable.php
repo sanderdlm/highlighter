@@ -1,4 +1,5 @@
 <?php
+// phpcs:ignoreFile
 
 // Great source of vitamins
 class Vegetable

@@ -220,11 +220,11 @@ final class Highlighter
         return ob_get_clean();
     }
 
-    private function getStyle(int $tokenType): string
+    private function getStyle(int $tokenId): string
     {
-        foreach ($this->tokenMap as $type => $tokens) {
-            if (in_array($tokenType, $tokens)) {
-                return $this->styleMap[$type];
+        foreach ($this->tokenMap as $group => $tokens) {
+            if (in_array($tokenId, $tokens)) {
+                return $this->styleMap[$group];
             }
         }
 
@@ -235,9 +235,9 @@ final class Highlighter
     {
         $missingKeys = [];
 
-        foreach ($this->tokenMap as $type => $tokens) {
-            if (!array_key_exists($type, $this->styleMap)) {
-                $missingKeys[] = $type;
+        foreach ($this->tokenMap as $group => $tokens) {
+            if (!array_key_exists($group, $this->styleMap)) {
+                $missingKeys[] = $group;
             }
         }
 
